@@ -20,7 +20,6 @@ while running:
 
     # RENDER YOUR GAME HERE
     pygame.draw.circle(surface=screen, color=[252, 10, 100], center=[cenX, cenY], radius=50)
-    pygame.draw.
 
     pygame.display.flip()
 
