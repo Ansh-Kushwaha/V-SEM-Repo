@@ -3,7 +3,7 @@ import math
 
 width = 1000
 height = 500
-G = 10
+G = 70
 
 pygame.init()
 pygame.display.set_caption("Planet Simulation")
@@ -19,43 +19,42 @@ class Planet(pygame.sprite.Sprite):
         self.vel = vel
         self.rad = rad
 
-        self.image = pygame.Surface([rad * 2, rad * 2])
-        self.image.fill([0, 0, 0])
+        self.image = pygame.Surface([rad * 2, rad * 2], pygame.SRCALPHA)
+        # self.image.fill([0, 0, 0])
         self.rect = self.image.get_rect()
     
         pygame.draw.circle(self.image, self.color, (self.rad, self.rad), self.rad)
 
     def update(self, planets):
+        self.rect.center = self.pos
+        ax, ay = 0, 0
         for planet in planets:
             if planet != self:
                 d = pygame.math.Vector2(self.pos).distance_to(planet.pos)
                 if d == 0:
                     d = 0.000001
-                dy = self.pos.y - planet.pos.y
-                dx = self.pos.x - planet.pos.x
+                dy = planet.pos.y - self.pos.y
+                dx = planet.pos.x - self.pos.x
                 # angle = pygame.math.Vector2(self.pos).angle_to(planet.pos) * math.pi / 180
                 angle = math.atan2(dy, dx)
-                force = self.mass * planet.mass / (d * d)
-                ax = (force  * math.cos(angle)) / self.mass
-                ay = (force  * math.sin(angle)) / self.mass 
-                print(angle)
+                force = G * self.mass * planet.mass / (d * d)
+                ax += (force  * (dx / d)) / self.mass
+                ay += (force  * (dy / d)) / self.mass 
+                print(ax, ay)
+        self.vel.x += ax
+        self.vel.y += ay
 
-                self.vel.x += ax
-                self.vel.y += ay
-
-                self.pos.x += self.vel.x
-                self.pos.y += self.vel.y
-
-                print(self.pos)
-                # print('Rect', self.rect)
+        self.pos.x += self.vel.x
+        self.pos.y += self.vel.y
 
 planets = []
 
-sunPos = pygame.Vector2(width // 2 - 80, height // 2 - 80)
-p1Pos = pygame.Vector2(width // 2 + 1000, height // 2 - 10)
+sunPos = pygame.Vector2(width // 2, height // 2)
+p1Pos = pygame.Vector2(width // 2, height // 2 - 200)
 
-sun = Planet(200, [253, 184, 19], sunPos, pygame.Vector2(0, 0), 80)
-p1 = Planet(10, [51,194,254], p1Pos, pygame.Vector2(0, 0), 10)
+sun = Planet(200, [253, 184, 19], sunPos, pygame.Vector2(-0.2, 0), 80)
+p1 = Planet(4, [51,194,254], p1Pos, pygame.Vector2(10, 0), 10)
+m1 = Planet(1, [43, 234, 123], m1.pos, pygame)
 
 planets.append(sun)
 planets.append(p1)
@@ -64,8 +63,8 @@ group = pygame.sprite.Group()
 group.add(sun)
 group.add(p1)
 
-# pygame.Surface.blit(screen, p1.image, p1.pos)
-# pygame.Surface.blit(screen, sun.image, sun.pos)
+pygame.Surface.blit(screen, p1.image, p1.pos)
+pygame.Surface.blit(screen, sun.image, sun.pos)
 
 
 def main():
@@ -79,7 +78,7 @@ def main():
             planet.update(planets)
         screen.fill([0, 0, 0])
         for planet in planets:
-            pygame.Surface.blit(screen, planet.image, planet.pos)
+            screen.blit(planet.image, planet.rect)
 
         pygame.display.flip()
 
