@@ -3,7 +3,8 @@ import math
 
 width = 1000
 height = 500
-G = 70
+center = pygame.Vector2(width // 2, height // 2)
+G = 10
 
 pygame.init()
 pygame.display.set_caption("Planet Simulation")
@@ -20,8 +21,8 @@ class Planet(pygame.sprite.Sprite):
         self.rad = rad
 
         self.image = pygame.Surface([rad * 2, rad * 2], pygame.SRCALPHA)
-        # self.image.fill([0, 0, 0])
         self.rect = self.image.get_rect()
+        self.rect.center = self.pos
     
         pygame.draw.circle(self.image, self.color, (self.rad, self.rad), self.rad)
 
@@ -40,41 +41,44 @@ class Planet(pygame.sprite.Sprite):
                 force = G * self.mass * planet.mass / (d * d)
                 ax += (force  * (dx / d)) / self.mass
                 ay += (force  * (dy / d)) / self.mass 
-                print(ax, ay)
+
+                # print(ax, ay)
         self.vel.x += ax
         self.vel.y += ay
-
         self.pos.x += self.vel.x
         self.pos.y += self.vel.y
 
+        pygame.draw.line(screen, self.color, self.rect.center, self.rect.center)
+
+
 planets = []
 
-sunPos = pygame.Vector2(width // 2, height // 2)
-p1Pos = pygame.Vector2(width // 2, height // 2 - 200)
+sunPos = center
+p1Pos = pygame.Vector2(center.x + 140, center.y)
+p2Pos = pygame.Vector2(center.x, center.y + 210)
 
-sun = Planet(200, [253, 184, 19], sunPos, pygame.Vector2(-0.2, 0), 80)
-p1 = Planet(4, [51,194,254], p1Pos, pygame.Vector2(10, 0), 10)
-m1 = Planet(1, [43, 234, 123], m1.pos, pygame)
+sun = Planet(4000, [253, 184, 19], sunPos, pygame.Vector2(0, -1.2), 40)
+p1 = Planet(200, [51,194,254], p1Pos, pygame.Vector2(0, 18), 12)
+p2 = Planet(180, [193, 68, 14], p2Pos, pygame.Vector2(16, 0), 10)
+
+screen.blit(sun.image, sun.rect)
+screen.blit(p1.image, p1.rect)
+screen.blit(p2.image, p2.rect)
 
 planets.append(sun)
 planets.append(p1)
-
-group = pygame.sprite.Group()
-group.add(sun)
-group.add(p1)
-
-pygame.Surface.blit(screen, p1.image, p1.pos)
-pygame.Surface.blit(screen, sun.image, sun.pos)
-
+planets.append(p2)
 
 def main():
     running = True    
     while running:
-        clock.tick(60)
+        clock.tick(720)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
         for planet in planets:
+            if planet == sun:
+                continue
             planet.update(planets)
         screen.fill([0, 0, 0])
         for planet in planets:
