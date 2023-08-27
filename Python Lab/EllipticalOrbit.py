@@ -58,21 +58,21 @@ p1Pos = pygame.Vector2(center.x + 140, center.y)
 p2Pos = pygame.Vector2(center.x, center.y + 210)
 
 sun = Planet(4000, [253, 184, 19], sunPos, pygame.Vector2(0, -1.2), 40)
-p1 = Planet(200, [51,194,254], p1Pos, pygame.Vector2(0, 18), 12)
-p2 = Planet(180, [193, 68, 14], p2Pos, pygame.Vector2(16, 0), 10)
+p1 = Planet(200, [51,194,254], p1Pos, pygame.Vector2(0, 19), 12)
+# p2 = Planet(180, [193, 68, 14], p2Pos, pygame.Vector2(12, 0), 10)
 
 screen.blit(sun.image, sun.rect)
 screen.blit(p1.image, p1.rect)
-screen.blit(p2.image, p2.rect)
+# screen.blit(p2.image, p2.rect)
 
 planets.append(sun)
 planets.append(p1)
-planets.append(p2)
+# planets.append(p2)
 
 def main():
     running = True    
     while running:
-        clock.tick(720)
+        clock.tick(30)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
