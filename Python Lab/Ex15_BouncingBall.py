@@ -1,4 +1,5 @@
 import math
+import random
 import pygame
 
 pygame.init()
@@ -23,11 +24,20 @@ class Ball(pygame.sprite.Sprite):
 
         pygame.draw.circle(self.image, self.color, (self.rad, self.rad), self.rad)
 
-    def update(self):
-        if self.pos.x < 0 or self.pos.x > width:
+    def update(self, balls):
+        if self.pos.x - self.rad < 0 or self.pos.x + self.rad > width:
             self.vel.x = -self.vel.x
-        if self.pos.y < 0 or self.pos.y > height:
+        if self.pos.y - self.rad < 0 or self.pos.y + self.rad > height:
             self.vel.y = -self.vel.y
+
+        for ball in balls:
+            if ball != self:
+                d = pygame.math.Vector2(self.pos).distance_to(ball.pos)
+                if d <= self.rad + ball.rad:
+                    self.vel.x = -self.vel.x
+                    self.vel.y = -self.vel.y
+                    ball.vel.x = -ball.vel.x
+                    ball.vel.y = -ball.vel.y
 
         self.pos += self.vel
         self.rect.center = self.pos
@@ -35,10 +45,10 @@ class Ball(pygame.sprite.Sprite):
 
 
 
-ball1 = Ball(30, [250, 0, 0], pygame.Vector2(500, 100), pygame.Vector2(5, 1), 30)
-ball2 = Ball(30, [120, 0, 0], pygame.Vector2(100, 200), pygame.Vector2(2, 1), 30)
-ball3 = Ball(30, [100, 0, 0], pygame.Vector2(200, 400), pygame.Vector2(5, 6), 30)
-ball4 = Ball(30, [53, 0, 0], pygame.Vector2(800, 300), pygame.Vector2(5, 2), 30)
+ball1 = Ball(30, [250, 0, 0], pygame.Vector2(500, 100), pygame.Vector2(random.randint(-5, 5), random.randint(-5, 5)), 30)
+ball2 = Ball(20, [200, 200, 200], pygame.Vector2(100, 200), pygame.Vector2(random.randint(-5, 5), random.randint(-5, 5)), 20)
+ball3 = Ball(40, [100, 230, 0], pygame.Vector2(200, 400), pygame.Vector2(random.randint(-5, 5), random.randint(-5, 5)), 40)
+ball4 = Ball(45, [53, 0, 241], pygame.Vector2(800, 300), pygame.Vector2(random.randint(-5, 5), random.randint(-5, 5)), 45)
 # screen.blit(ball1.image, ball1.rect)
 # screen.blit(ball2.image, ball2.rect)
 # screen.blit(ball3.image, ball3.rect)
@@ -60,7 +70,7 @@ def main():
                 running = False
         screen.fill([0, 0, 0])
         for ball in balls:
-            ball.update()
+            ball.update(balls)
             screen.blit(ball.image, ball.rect)
 
         pygame.display.flip()

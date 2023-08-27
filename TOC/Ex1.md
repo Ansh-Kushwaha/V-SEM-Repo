@@ -10,7 +10,7 @@ A finite automata is a collection of 5 tuple:
 - F : Set of final states
 
 ## Model of Finite Automata
-![FA Model](images/model.png)
+![FA Model](images/model.png)  
 It is an abstract model of a digital computer which reads an input string and changes its internal state depending on the current input symbol.
 
 ### Finite Automata is characterized into two types:
