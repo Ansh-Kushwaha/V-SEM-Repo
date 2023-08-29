@@ -1,6 +1,7 @@
 import math
 import random
 import pygame
+import numpy as np
 
 pygame.init()
 screen = pygame.display.set_mode([1000, 500])
@@ -14,7 +15,7 @@ class Ball(pygame.sprite.Sprite):
         super().__init__()
         self.mass = mass
         self.color = color
-        self.rad = rad
+        self.radius = rad
         self.pos = pos
         self.vel = vel
 
@@ -22,49 +23,66 @@ class Ball(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
 
-        pygame.draw.circle(self.image, self.color, (self.rad, self.rad), self.rad)
+        pygame.draw.circle(self.image, self.color, (self.radius, self.radius), self.radius)
 
     def update(self, balls):
-        if self.pos.x - self.rad < 0 or self.pos.x + self.rad > width:
+        if self.pos.x - self.radius < 0 or self.pos.x + self.radius > width:
             self.vel.x = -self.vel.x
-        if self.pos.y - self.rad < 0 or self.pos.y + self.rad > height:
+        if self.pos.y - self.radius < 0 or self.pos.y + self.radius > height:
             self.vel.y = -self.vel.y
-
-        for ball in balls:
-            if ball != self:
-                d = pygame.math.Vector2(self.pos).distance_to(ball.pos)
-                if d <= self.rad + ball.rad:
-                    self.vel.x = -self.vel.x
-                    self.vel.y = -self.vel.y
-                    ball.vel.x = -ball.vel.x
-                    ball.vel.y = -ball.vel.y
 
         self.pos += self.vel
         self.rect.center = self.pos
 
+        for ball in balls:
+            if ball != self:
+                if self.pos.distance_to(ball.pos) <= self.radius + ball.radius:
+                    dx = ball.pos.x - self.pos.x
+                    dy = ball.pos.y - self.pos.y
+
+                    angle = math.atan2(dy, dx)
+                    u1 = self.vel.x * math.cos(angle) + self.vel.y * math.sin(angle)
+                    u2 = ball.vel.x * math.cos(angle) + ball.vel.y * math.sin(angle)
+
+                    p1 = self.mass * u1
+                    p2 = ball.mass * u2
+                    print(p1, p2)
+
+                    a = np.array([[1, -1], [ball.mass, self.mass]])
+                    b = np.array([u2 - u1, p2 + p1])
+                    x = np.linalg.solve(a, b)
+                    print(x)
+
+                    ball.vel.x = x[1] * math.cos(angle)
+                    ball.vel.y = x[1] * math.sin(angle)
+                    self.vel.x = x[0] * math.cos(angle)
+                    self.vel.y = x[0] * math.sin(angle)
+
+            self.pos.x += self.vel.x
+            self.pos.y += self.vel.y
+            self.rect.center = self.pos
+                    
+
+
+                    
+                    
 
 
 
-ball1 = Ball(30, [250, 0, 0], pygame.Vector2(500, 100), pygame.Vector2(random.randint(-5, 5), random.randint(-5, 5)), 30)
-ball2 = Ball(20, [200, 200, 200], pygame.Vector2(100, 200), pygame.Vector2(random.randint(-5, 5), random.randint(-5, 5)), 20)
-ball3 = Ball(40, [100, 230, 0], pygame.Vector2(200, 400), pygame.Vector2(random.randint(-5, 5), random.randint(-5, 5)), 40)
-ball4 = Ball(45, [53, 0, 241], pygame.Vector2(800, 300), pygame.Vector2(random.randint(-5, 5), random.randint(-5, 5)), 45)
-# screen.blit(ball1.image, ball1.rect)
-# screen.blit(ball2.image, ball2.rect)
-# screen.blit(ball3.image, ball3.rect)
-# screen.blit(ball4.image, ball4.rect)
+
+
+ball1 = Ball(5, [250, 0, 0], pygame.Vector2(100, 228.787), pygame.Vector2(5, 2), 50)
+ball2 = Ball(3, [200, 200, 200], pygame.Vector2(900, 271.213), pygame.Vector2(-3, 3), 30)
 
 balls = []
 
 balls.append(ball1)
 balls.append(ball2)
-balls.append(ball3)
-balls.append(ball4)
 
 def main():
     running = True    
     while running:
-        clock.tick(120)
+        clock.tick(60)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
