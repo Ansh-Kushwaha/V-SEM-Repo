@@ -46,7 +46,6 @@ class Ball(pygame.sprite.Sprite):
 
                     p1 = self.mass * u1
                     p2 = ball.mass * u2
-                    print(p1, p2)
 
                     a = np.array([[1, -1], [ball.mass, self.mass]])
                     b = np.array([u2 - u1, p2 + p1])
@@ -58,21 +57,12 @@ class Ball(pygame.sprite.Sprite):
                     self.vel.x = x[0] * math.cos(angle)
                     self.vel.y = x[0] * math.sin(angle)
 
-            self.pos.x += self.vel.x
-            self.pos.y += self.vel.y
-            self.rect.center = self.pos
-                    
+                self.pos.x += self.vel.x
+                self.pos.y += self.vel.y
+                self.rect.center = self.pos
 
-
-                    
-                    
-
-
-
-
-
-ball1 = Ball(5, [250, 0, 0], pygame.Vector2(100, 228.787), pygame.Vector2(5, 2), 50)
-ball2 = Ball(3, [200, 200, 200], pygame.Vector2(900, 271.213), pygame.Vector2(-3, 3), 30)
+ball1 = Ball(5, [250, 0, 0], pygame.Vector2(100, 228.787), pygame.Vector2(10,12), 50)
+ball2 = Ball(3, [200, 200, 200], pygame.Vector2(900, 271.213), pygame.Vector2(-18, 9), 30)
 
 balls = []
 
