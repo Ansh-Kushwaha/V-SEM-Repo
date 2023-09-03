@@ -6,5 +6,6 @@ def max(l):
       m = l[i]
   return m
 
-arr = [9, 10, 2, 4, 12, 53, 22]
-print("Maximum element in", arr, "is:", max(arr))
+l= [9, 10, 2, 4, 12, 53, 22]
+print("List: ", l)
+print("Maximum element in", l, "is:", max(l))

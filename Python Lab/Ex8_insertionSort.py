@@ -11,7 +11,7 @@ def insertionSort(arr):
       j -= 1
     arr[j + 1] = key
 
-arr = [23, 89, 12, 43, 64]
+arr = [87, 34, 12, 8, 10, 50]
+print("Unsorted List:", arr)
 insertionSort(arr)
-
-print(arr)
+print("Sorted List:", arr)

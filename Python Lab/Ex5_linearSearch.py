@@ -8,6 +8,7 @@ def linearSearch(arr, x):
 arr = [23, 12, 45, 1, 8, 4, 3]
 x = 8
 idx = linearSearch(arr, x)
+print("List:", arr)
 if (idx != -1):
     print(x, 'is present at index', idx)
 else:
