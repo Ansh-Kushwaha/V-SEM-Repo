@@ -1,13 +1,15 @@
+import java.util.*;
+
 public class DFA {
     List<State> states;
     State initial;
 
-    public DFA(List<State> states, State initial, List<State> finalS) {
-        this.states = states,
+    public DFA(List<State> states, State initial, List<State> finalSt) {
+        this.states = states;
         this.initial = initial;
-        this.initial.setInitial();
+        this.initial.isInitial = true;
         for (State f : finalSt)
-            f.setFinal();
+            f.isFinal = true;
     }
 
     public boolean check(String s) {
@@ -16,9 +18,11 @@ public class DFA {
             if (curr.symbols.contains(ch)) {
                 curr = curr.transitions.get(ch);
             }
+            else
+                return false;
         }
 
-        if (finalS.contains(curr))
+        if (curr.isFinal)
             return true;
         return false;
     }
