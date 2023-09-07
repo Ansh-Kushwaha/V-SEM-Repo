@@ -1,19 +1,19 @@
 public class State {
-    private String name;
-    private boolean isInitial;
-    private boolean isFinal;
-    Map<Character, 
-    public State(String name, boolean isInitial, boolean isFinal) {
-        this.name = name;
-        this.isInitial = isInitial;
-        this.isFinal = isFinal;
+    public boolean isInitial;
+    public boolean isFinal;
+    public List<Character> symbols;
+    public HashMap<Character, State> Transitions;
+
+    public State(List<Character> symbols, HashMap<Character, State> transitions) {
+        this.symbols = symbols;
+        this.transitions = transitions;
     }
 
-    public boolean isInitial() {
-        return isInitial;
+    public boolean setInitial() {
+        isInitial = true;
     }
 
-    public boolean isFinal() {
-        return isFinal;
+    public boolean setFinal() {
+        isInitial = false;
     }
 }
