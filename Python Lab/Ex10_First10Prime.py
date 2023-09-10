@@ -13,8 +13,7 @@ def findPrime(n):
       lst.append(num)
     num += 1
     if len(lst) == n:
-      break  
-  return lst
+      return lst
 
 n = 20
 print(findPrime(n))
