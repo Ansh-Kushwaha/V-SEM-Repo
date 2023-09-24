@@ -1,8 +1,6 @@
 import java.util.*;
 
 public class State {
-    public boolean isInitial;
-    public boolean isFinal;
     public List<Character> symbols;
     public HashMap<Character, State> transitions;
 

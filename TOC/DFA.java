@@ -2,14 +2,13 @@ import java.util.*;
 
 public class DFA {
     List<State> states;
+    List<State> finalSt;
     State initial;
 
     public DFA(List<State> states, State initial, List<State> finalSt) {
         this.states = states;
         this.initial = initial;
-        this.initial.isInitial = true;
-        for (State f : finalSt)
-            f.isFinal = true;
+        this.finalSt = finalSt;
     }
 
     public boolean check(String s) {
@@ -22,7 +21,7 @@ public class DFA {
                 return false;
         }
 
-        if (curr.isFinal)
+        if (finalSt.contains(curr))
             return true;
         return false;
     }
