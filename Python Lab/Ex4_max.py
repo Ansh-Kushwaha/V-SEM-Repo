@@ -6,6 +6,6 @@ def max(l):
       m = l[i]
   return m
 
-l= [9, 10, 2, 4, 12, 53, 22]
+l = [9, 10, 2, 4, 12, 53, 22]
 print("List: ", l)
 print("Maximum element in", l, "is:", max(l))

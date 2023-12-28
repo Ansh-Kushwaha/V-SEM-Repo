@@ -3,7 +3,7 @@ def selectionSort(arr):
   if n <= 1 :
     return
 
-  for i in range(0, n-1):
+  for i in range(n - 1):
     minIdx = i
     for j in range(i + 1, n):
       if arr[j] < arr[minIdx]:
